@@ -156,6 +156,16 @@ ul,ol{list-style:none}
 .btn--nav{background:var(--ink);color:var(--on-ink)}
 .nav:not([data-elevated="true"]) .btn--nav{background:var(--gold-lt);color:var(--ink)}
 .btn--nav:hover{transform:translateY(-2px)}
+
+/* Sello Great Place To Work — sólo aparece cuando la barra se vuelve crema.
+   Antes de elevarse queda oculto (no compite con el hero). */
+.nav__cert{
+  display:flex;align-items:center;flex-shrink:0;margin-left:-6px;
+  opacity:0;transform:translateY(-4px);pointer-events:none;
+  transition:opacity .4s var(--ease), transform .4s var(--ease);
+}
+.nav__cert img{height:clamp(30px,3.4vw,38px);width:auto;display:block}
+.nav[data-elevated="true"] .nav__cert{opacity:1;transform:none}
 .btn--gold{background:var(--gold);color:var(--ink)}
 .btn--gold:hover{background:var(--gold-lt);transform:translateY(-2px)}
 .btn--ghost{background:transparent;color:var(--on-ink);border-color:var(--line-ink)}
@@ -1040,7 +1050,7 @@ ul,ol{list-style:none}
   .offices--mx ul{columns:2}
 }
 @media (max-width: 860px){
-  .nav__links,.btn--nav{display:none}
+  .nav__links,.btn--nav,.nav__cert{display:none}
   .nav__toggle{display:flex}
   .medios__grid{grid-template-columns:1fr;}
   /* Menos recorrido pegajoso en móvil: el gesto completo cabe en tres
