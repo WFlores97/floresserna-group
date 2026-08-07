@@ -553,5 +553,23 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+
+  <!-- Los correos de Netlify Identity (invitación al panel, recuperación de
+       contraseña) aterrizan en la portada con el token en el hash, no en
+       /admin/. El widget es quien sabe atenderlos, pero pesa y es de un
+       tercero: se carga sólo cuando el token viene en la URL, así que el
+       visitante normal nunca lo pide. Al terminar el alta, el widget emite
+       "login" y de ahí mandamos al panel — con ruta relativa, para no romper
+       la copia que vive en el subdirectorio de GitHub Pages. -->
+  <script>
+    if (/(invite|recovery|confirmation)_token=/.test(location.hash)) {
+      var s = document.createElement("script");
+      s.src = "https://identity.netlify.com/v1/netlify-identity-widget.js";
+      s.onload = function () {
+        window.netlifyIdentity.on("login", function () { location.href = "admin/"; });
+      };
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 </html>
