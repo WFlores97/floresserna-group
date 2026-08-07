@@ -91,6 +91,47 @@
     counters.forEach((c) => cio.observe(c));
   }
 
+  /* ---------- Medios (data-driven from data/medios.json) ---------- */
+  const mediosGrid = document.getElementById("mediosGrid");
+  if (mediosGrid) {
+    const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const esc = (s) =>
+      String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+      );
+    fetch("data/medios.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        const items = (data && data.publicaciones) || [];
+        if (!items.length) return; // keep static fallback cards
+        items.sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")));
+        mediosGrid.innerHTML = items
+          .map((p) => {
+            const d = new Date(String(p.fecha || "") + "T00:00:00");
+            const fecha = isNaN(d.getTime())
+              ? esc(p.fecha)
+              : String(d.getDate()).padStart(2, "0") + " " + MESES[d.getMonth()] + " " + d.getFullYear();
+            let href = p.pdf || p.url || "";
+            if (href && !/^https?:/i.test(href)) href = href.replace(/^\//, "");
+            const isPdf = /\.pdf$/i.test(href);
+            const tag = href ? "a" : "article";
+            const attrs = href ? ' href="' + esc(href) + '"' + (isPdf ? ' target="_blank" rel="noopener"' : "") : "";
+            const cta = '<span class="post__cta">Leer <span aria-hidden="true">&rarr;</span></span>';
+            return (
+              "<" + tag + ' class="post"' + attrs + ">" +
+              '<div class="post__meta"><span>' + esc(p.fuente) + "</span>" +
+              '<time datetime="' + esc(p.fecha) + '">' + fecha + "</time></div>" +
+              '<h3 class="post__title">' + esc(p.titulo) + "</h3>" +
+              '<p class="post__excerpt">' + esc(p.resumen) + "</p>" +
+              cta +
+              "</" + tag + ">"
+            );
+          })
+          .join("");
+      })
+      .catch(() => { /* network/parse error → keep the static cards already in the HTML */ });
+  }
+
   /* ---------- Hero mouse parallax ---------- */
   const heroEl = document.querySelector(".hero");
   const heroBg = document.querySelector(".hero__bg");
