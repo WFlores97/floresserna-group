@@ -7,6 +7,18 @@
   <meta name="description" content="Flores Serna Group es un consorcio multidisciplinario en derecho, finanzas, contabilidad y relaciones institucionales. Sede en Ciudad de México con presencia internacional." />
   <meta name="theme-color" content="#0e0e0f" />
 
+  <!-- Los correos de Netlify Identity (invitación al panel, recuperación de
+       contraseña) aterrizan aquí con el token en el hash, no en /admin/, que
+       es quien sabe atenderlo: admin/index.html carga el widget como script
+       normal y por eso sí se inicializa. Reenviamos el hash tal cual, antes
+       de montar la portada, para no dejar ver un destello del hero. Ruta
+       relativa, que la copia de GitHub Pages vive en un subdirectorio. -->
+  <script>
+    if (/(invite|recovery|confirmation)_token=/.test(location.hash)) {
+      location.replace("admin/" + location.hash);
+    }
+  </script>
+
   <!-- Open Graph -->
   <meta property="og:title" content="Flores Serna Group" />
   <meta property="og:description" content="Consorcio multidisciplinario. Derecho, finanzas y relaciones institucionales." />
@@ -553,23 +565,5 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
-
-  <!-- Los correos de Netlify Identity (invitación al panel, recuperación de
-       contraseña) aterrizan en la portada con el token en el hash, no en
-       /admin/. El widget es quien sabe atenderlos, pero pesa y es de un
-       tercero: se carga sólo cuando el token viene en la URL, así que el
-       visitante normal nunca lo pide. Al terminar el alta, el widget emite
-       "login" y de ahí mandamos al panel — con ruta relativa, para no romper
-       la copia que vive en el subdirectorio de GitHub Pages. -->
-  <script>
-    if (/(invite|recovery|confirmation)_token=/.test(location.hash)) {
-      var s = document.createElement("script");
-      s.src = "https://identity.netlify.com/v1/netlify-identity-widget.js";
-      s.onload = function () {
-        window.netlifyIdentity.on("login", function () { location.href = "admin/"; });
-      };
-      document.body.appendChild(s);
-    }
-  </script>
 </body>
 </html>
