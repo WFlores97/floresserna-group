@@ -8,10 +8,14 @@ que funciona igual en un subdirectorio (GitHub Pages) o en un dominio raíz
 
 ## Estado actual
 
-- **GitHub Pages** — solo vitrina de avances: https://wflores97.github.io/floresserna-group/
-- El panel de administración (`/admin`) **todavía no inicia sesión aquí** (GitHub Pages
-  no tiene Identity). Se activa al mover el sitio al host final. El sitio público
-  funciona perfecto mientras tanto.
+- **Netlify — host actual:** https://soft-basbousa-ef52b7.netlify.app
+  Despliega solo en cada push a `main`. Identity ya está activo; los pasos que
+  siguen (Git Gateway, invitaciones, dominio) están abajo.
+- **GitHub Pages** — sigue viva como vitrina, sin estorbar:
+  https://wflores97.github.io/floresserna-group/
+  Ahí el panel `/admin` no inicia sesión y no lo hará: GitHub Pages no tiene
+  Identity. El sitio público se ve igual.
+- **floresserna.com** — todavía apunta al WordPress viejo.
 
 ---
 
@@ -32,18 +36,12 @@ Es la opción más cómoda para que alguien no técnico publique boletines.
 4. **Identity → Invite users** → invita tu correo. Te llega un email; aceptas y creas contraseña.
 5. Entra a `https://TU-SITIO/admin/` → inicia sesión → ya puedes agregar publicaciones y subir PDFs.
 
-> Para que el enlace de invitación te redirija solo al panel, añade esto antes de
-> `</body>` en `index.html` (opcional):
-> ```html
-> <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-> <script>
->   if (window.netlifyIdentity) {
->     window.netlifyIdentity.on("init", u => {
->       if (!u) window.netlifyIdentity.on("login", () => { location.href = "/admin/"; });
->     });
->   }
-> </script>
-> ```
+> **Ya resuelto en el repo.** Los correos de Identity (invitación, recuperación de
+> contraseña) aterrizan en la portada con el token en el hash, no en `/admin/`. El
+> final de `index.html` detecta ese token y sólo entonces carga el widget de Netlify
+> Identity, que abre el diálogo de alta y al terminar redirige al panel. Se carga
+> condicionalmente a propósito: es un script de terceros y no tiene por qué pesarle
+> a cada visita de la portada.
 
 ### 3. Dominio floresserna.com
 En Netlify → **Domain management** → agrega el dominio y sigue las instrucciones de DNS
