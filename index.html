@@ -105,8 +105,6 @@
           <div class="reel__matte reel__matte--bot" aria-hidden="true"></div>
 
           <div class="reel__inner">
-            <p class="reel__eyebrow"><span class="eyebrow__dot"></span> Consorcio multidisciplinario</p>
-
             <!-- aria-label fija el nombre accesible: el fantasma de registro se
                  dibuja con contenido generado y no debe leerse dos veces. -->
             <h1 class="reel__title reel__title--logo" id="hero-title" aria-label="Flores Serna Group">
@@ -411,13 +409,6 @@
         </p>
       </div>
 
-      <!-- Lectura del mapa. Rima con el «Encuadre» del hero: dice un dato real,
-           no decora. La cuenta de plazas con luz la calcula main.js. -->
-      <div class="wrap mapcap reveal">
-        <p class="mapcap__l"><span class="mapcap__dot"></span> Luz solar en tiempo real</p>
-        <p class="mapcap__r" id="mapReadout">Calculando<span class="mapcap__ell">…</span></p>
-      </div>
-
       <!-- Mapa (apoyo visual; la lista de abajo es la fuente de verdad accesible).
            Los pines los coloca main.js desde latitud/longitud reales: antes eran
            veinte porcentajes escritos a mano, imposibles de mantener. -->
@@ -464,26 +455,6 @@
               <li data-plaza="pty"><span>Ciudad de Panamá</span><small>Panamá</small><time class="clock" data-plaza="pty">—</time></li>
             </ul>
           </div>
-
-          <div class="offices offices--mx reveal">
-            <h3 class="offices__title">México · 15+ oficinas</h3>
-            <ul>
-              <li>Ciudad de México</li>
-              <li>Monterrey / San Pedro</li>
-              <li>Guadalajara</li>
-              <li>Querétaro</li>
-              <li>Puebla</li>
-              <li>León</li>
-              <li>San Luis Potosí</li>
-              <li>Saltillo</li>
-              <li>Chihuahua</li>
-              <li>Hermosillo</li>
-              <li>Tijuana</li>
-              <li>Mérida</li>
-              <li>Tampico</li>
-              <li>Boca del Río</li>
-            </ul>
-          </div>
         </div>
       </div>
     </section>
@@ -499,28 +470,97 @@
           <a href="#contacto" class="link-arrow reveal">Suscríbete al boletín <span aria-hidden="true">→</span></a>
         </div>
 
-        <div class="medios__grid" id="mediosGrid">
-          <article class="post reveal">
-            <div class="post__meta"><span>Aranceles Globales</span><time>19 May 2025</time></div>
-            <h3 class="post__title">Un año de reformas y el posicionamiento de FS&amp;A</h3>
-            <p class="post__excerpt">En un año marcado por reformas significativas, la firma reafirma su posición de referencia en el ámbito legal, contable y fiscal.</p>
-            <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
-          </article>
+        <!-- 04.1 — Publicaciones. El contenido real lo escribe main.js desde
+             data/medios.json; estas tres tarjetas son el respaldo de cuando el
+             fetch no llega. La portada de cada una es opcional: sin `imagen`
+             la tarjeta es sólo texto, que es como se ve hoy. -->
+        <section class="mblock" aria-labelledby="pub-title">
+          <div class="mblock__head reveal">
+            <h3 class="mblock__title" id="pub-title">Publicaciones</h3>
+            <p class="mblock__note">Análisis y apariciones en medios</p>
+          </div>
 
-          <article class="post reveal">
-            <div class="post__meta"><span>Aranceles Globales</span><time>09 Abr 2025</time></div>
-            <h3 class="post__title">De despacho fiscalista a práctica integral</h3>
-            <p class="post__excerpt">FS&amp;A inicia operaciones como despacho fiscalista y, con el tiempo, aborda nuevas materias a medida que sus clientes lo requieren.</p>
-            <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
-          </article>
+          <div class="medios__grid" id="mediosGrid">
+            <article class="post reveal">
+              <div class="post__body">
+                <div class="post__meta"><span>Aranceles Globales</span><time>19 May 2025</time></div>
+                <h4 class="post__title">Un año de reformas y el posicionamiento de FS&amp;A</h4>
+                <p class="post__excerpt">En un año marcado por reformas significativas, la firma reafirma su posición de referencia en el ámbito legal, contable y fiscal.</p>
+                <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
 
-          <article class="post reveal">
-            <div class="post__meta"><span>Aranceles Globales</span><time>02 Abr 2025</time></div>
-            <h3 class="post__title">Política fiscal y derechos humanos en América Latina</h3>
-            <p class="post__excerpt">Una colaboración para evaluar la relación actual entre la política fiscal y los derechos humanos en la región.</p>
-            <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
-          </article>
-        </div>
+            <article class="post reveal">
+              <div class="post__body">
+                <div class="post__meta"><span>Aranceles Globales</span><time>09 Abr 2025</time></div>
+                <h4 class="post__title">De despacho fiscalista a práctica integral</h4>
+                <p class="post__excerpt">FS&amp;A inicia operaciones como despacho fiscalista y, con el tiempo, aborda nuevas materias a medida que sus clientes lo requieren.</p>
+                <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="post reveal">
+              <div class="post__body">
+                <div class="post__meta"><span>Aranceles Globales</span><time>02 Abr 2025</time></div>
+                <h4 class="post__title">Política fiscal y derechos humanos en América Latina</h4>
+                <p class="post__excerpt">Una colaboración para evaluar la relación actual entre la política fiscal y los derechos humanos en la región.</p>
+                <span class="post__cta">Leer <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 04.2 — Boletín. Formato A4 (1:1.414), que es el del PDF: la portada
+             entra sin recortarse. Mientras no haya archivo de portada subido, se
+             dibuja una en tipografía con la paleta de la casa; en cuanto se sube
+             la imagen desde el panel, ésta la sustituye. -->
+        <section class="mblock" aria-labelledby="bol-title">
+          <div class="mblock__head reveal">
+            <h3 class="mblock__title" id="bol-title">Boletín</h3>
+            <p class="mblock__note">Publicación periódica · FS&amp;A</p>
+          </div>
+
+          <div class="bolgrid" id="boletinesGrid">
+            <article class="bol reveal">
+              <div class="bol__cover">
+                <div class="bol__ph">
+                  <span class="bol__ph-top">Flores Serna &amp; Asociados</span>
+                  <span class="bol__ph-num">Boletín <em>n.º 3</em></span>
+                  <span class="bol__ph-quote">«Nearshoring: la oportunidad de un país primer mundista.»</span>
+                  <span class="bol__ph-foot">Edición 2024</span>
+                </div>
+              </div>
+              <p class="bol__meta"><span class="bol__num">N.º 3</span> Octubre 2024</p>
+              <h4 class="bol__title">Nearshoring: la oportunidad de un país primer mundista</h4>
+            </article>
+
+            <article class="bol reveal">
+              <div class="bol__cover">
+                <div class="bol__ph">
+                  <span class="bol__ph-top">Flores Serna &amp; Asociados</span>
+                  <span class="bol__ph-num">Boletín <em>n.º 2</em></span>
+                  <span class="bol__ph-quote">«La prisión preventiva para delitos fiscales en el sistema procesal penal acusatorio.»</span>
+                  <span class="bol__ph-foot">Edición Verano 2024</span>
+                </div>
+              </div>
+              <p class="bol__meta"><span class="bol__num">N.º 2</span> Junio 2024</p>
+              <h4 class="bol__title">La prisión preventiva para delitos fiscales en el sistema procesal penal acusatorio</h4>
+            </article>
+
+            <article class="bol reveal">
+              <div class="bol__cover">
+                <div class="bol__ph">
+                  <span class="bol__ph-top">Flores Serna &amp; Asociados</span>
+                  <span class="bol__ph-num">Boletín <em>n.º 1</em></span>
+                  <span class="bol__ph-quote">«¿Está listo México para incluir la inteligencia artificial en el proceso de recaudación y fiscalización?»</span>
+                  <span class="bol__ph-foot">Edición Primavera 2024</span>
+                </div>
+              </div>
+              <p class="bol__meta"><span class="bol__num">N.º 1</span> Marzo 2024</p>
+              <h4 class="bol__title">¿Está listo México para incluir la inteligencia artificial en el proceso de recaudación y fiscalización?</h4>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
 

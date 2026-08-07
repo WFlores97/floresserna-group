@@ -149,14 +149,27 @@
     rows[0] && rows[0].classList.add("is-active");
   }
 
-  /* ---------- Medios (data-driven from data/medios.json) ---------- */
+  /* ---------- Medios & Boletín (data-driven) ----------
+     Dos rejillas, dos archivos: data/medios.json y data/boletines.json. Las dos
+     traen su respaldo estático escrito en el HTML, así que un fetch que no llega
+     deja la sección como estaba en vez de vaciarla. */
+  const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  const MESES_L = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
+                   "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const esc = (s) =>
+    String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+    );
+  // Las rutas del panel llegan con «/» al frente; el sitio vive en un
+  // subdirectorio de Pages, así que todo tiene que quedar relativo.
+  const ruta = (v) => {
+    let h = String(v || "");
+    if (h && !/^https?:/i.test(h)) h = h.replace(/^\//, "");
+    return h;
+  };
+
   const mediosGrid = document.getElementById("mediosGrid");
   if (mediosGrid) {
-    const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-    const esc = (s) =>
-      String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
-      );
     fetch("data/medios.json", { cache: "no-cache" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
@@ -169,25 +182,81 @@
             const fecha = isNaN(d.getTime())
               ? esc(p.fecha)
               : String(d.getDate()).padStart(2, "0") + " " + MESES[d.getMonth()] + " " + d.getFullYear();
-            let href = p.pdf || p.url || "";
-            if (href && !/^https?:/i.test(href)) href = href.replace(/^\//, "");
+            const href = ruta(p.pdf || p.url);
             const isPdf = /\.pdf$/i.test(href);
             const tag = href ? "a" : "article";
             const attrs = href ? ' href="' + esc(href) + '"' + (isPdf ? ' target="_blank" rel="noopener"' : "") : "";
             const cta = '<span class="post__cta">Leer <span aria-hidden="true">&rarr;</span></span>';
+            // La portada es opcional: sin ella la tarjeta es sólo texto.
+            const img = ruta(p.imagen);
+            const cover = img
+              ? '<div class="post__cover"><img src="' + esc(img) + '" alt="" loading="lazy" decoding="async" /></div>'
+              : "";
             return (
-              "<" + tag + ' class="post"' + attrs + ">" +
+              "<" + tag + ' class="post"' + attrs + ">" + cover +
+              '<div class="post__body">' +
               '<div class="post__meta"><span>' + esc(p.fuente) + "</span>" +
               '<time datetime="' + esc(p.fecha) + '">' + fecha + "</time></div>" +
-              '<h3 class="post__title">' + esc(p.titulo) + "</h3>" +
+              '<h4 class="post__title">' + esc(p.titulo) + "</h4>" +
               '<p class="post__excerpt">' + esc(p.resumen) + "</p>" +
+              cta +
+              "</div></" + tag + ">"
+            );
+          })
+          .join("");
+      })
+      .catch(() => { /* network/parse error → keep the static cards already in the HTML */ });
+  }
+
+  /* ---------- Boletín ----------
+     La portada manda: si hay archivo subido, se muestra tal cual en formato A4.
+     Si todavía no lo hay, se dibuja la misma portada en tipografía con la paleta
+     de la casa, para que la sección no enseñe un hueco mientras tanto. */
+  const boletinesGrid = document.getElementById("boletinesGrid");
+  if (boletinesGrid) {
+    fetch("data/boletines.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        const items = (data && data.boletines) || [];
+        if (!items.length) return; // se queda el respaldo del HTML
+        items.sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")));
+        boletinesGrid.innerHTML = items
+          .map((b) => {
+            const d = new Date(String(b.fecha || "") + "T00:00:00");
+            const fecha = isNaN(d.getTime())
+              ? esc(b.fecha)
+              : MESES_L[d.getMonth()] + " " + d.getFullYear();
+            const num = esc(b.numero);
+            const portada = ruta(b.portada);
+            const cover = portada
+              ? '<img src="' + esc(portada) + '" alt="Portada del boletín n.&ordm; ' + num +
+                '" loading="lazy" decoding="async" />'
+              : '<div class="bol__ph">' +
+                  '<span class="bol__ph-top">Flores Serna &amp; Asociados</span>' +
+                  '<span class="bol__ph-num">Bolet&iacute;n <em>n.&ordm; ' + num + "</em></span>" +
+                  '<span class="bol__ph-quote">&laquo;' + esc(b.titulo) + "&raquo;</span>" +
+                  '<span class="bol__ph-foot">' + esc(b.edicion || fecha) + "</span>" +
+                "</div>";
+            const href = ruta(b.pdf);
+            const tag = href ? "a" : "article";
+            const attrs = href
+              ? ' href="' + esc(href) + '" target="_blank" rel="noopener"'
+              : "";
+            const cta = href
+              ? '<span class="bol__cta">Leer el bolet&iacute;n <span aria-hidden="true">&rarr;</span></span>'
+              : "";
+            return (
+              "<" + tag + ' class="bol"' + attrs + ">" +
+              '<div class="bol__cover">' + cover + "</div>" +
+              '<p class="bol__meta"><span class="bol__num">N.&ordm; ' + num + "</span> " + fecha + "</p>" +
+              '<h4 class="bol__title">' + esc(b.titulo) + "</h4>" +
               cta +
               "</" + tag + ">"
             );
           })
           .join("");
       })
-      .catch(() => { /* network/parse error → keep the static cards already in the HTML */ });
+      .catch(() => { /* se queda el respaldo del HTML */ });
   }
 
   /* ---------- Reel: el encuadre dirigido por scroll ----------
@@ -389,7 +458,6 @@
     // --- Terminador + relojes ---
     const nightEl = document.getElementById("sunNight");
     const edgeEl = document.getElementById("sunEdge");
-    const readout = document.getElementById("mapReadout");
     const clocks = Array.prototype.slice.call(document.querySelectorAll(".clock"));
     const X0 = VB.x, X1 = VB.x + VB.w, Y0 = VB.y, Y1 = VB.y + VB.h;
 
@@ -419,10 +487,8 @@
       if (edgeEl) edgeEl.setAttribute("d", "M " + pts.join(" L "));
 
       // Relojes locales y estado día/noche
-      let conLuz = 0;
       PLAZAS.forEach((p) => {
         const dia = elevacion(p.lat, p.lon, s) > 0;
-        if (dia) conLuz++;
         let hora = "";
         try {
           hora = new Intl.DateTimeFormat("es-MX", {
@@ -438,9 +504,6 @@
         const pin = mapPins.querySelector('.pin[data-plaza="' + p.k + '"]');
         if (pin) pin.classList.toggle("is-day", dia);
       });
-      if (readout) {
-        readout.textContent = conLuz + " de " + PLAZAS.length + " plazas con luz";
-      }
     }
 
     trazarSol();

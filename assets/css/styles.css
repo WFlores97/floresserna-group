@@ -74,6 +74,14 @@ ul,ol{list-style:none}
 .section--ink{background:var(--ink);color:var(--on-ink);padding-block:clamp(80px,12vw,170px)}
 .section--paper2{background:var(--paper-2);padding-block:clamp(72px,11vw,150px)}
 
+/* Costura entre dos secciones de tinta seguidas. El relleno de sección está
+   calculado contra un cambio de fondo; cuando no lo hay —Divisiones y
+   Presencia son las dos tinta— los dos rellenos se suman y dejan 340 px de
+   nada. Aquí la costura baja a ~128 px, que es aire suficiente sin agujero.
+   `:has()` sin soporte simplemente deja el relleno completo de antes. */
+.section--ink:has(+ .section--ink){padding-bottom:clamp(36px,4.5vw,64px)}
+.section--ink + .section--ink{padding-top:clamp(36px,4.5vw,64px)}
+
 .skip-link{
   position:fixed;top:-100px;left:16px;z-index:2000;
   background:var(--ink);color:var(--on-ink);
@@ -93,7 +101,6 @@ ul,ol{list-style:none}
 }
 .eyebrow--light{color:var(--on-ink-mut)}
 .eyebrow .idx{color:var(--gold)}
-.eyebrow__dot{width:7px;height:7px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 4px rgba(185,151,79,.18)}
 
 .section-title{
   font-family:var(--ff-display);
@@ -322,17 +329,6 @@ ul,ol{list-style:none}
      encuadre son barras absolutas abajo, así que aquí no se reserva su alto. */
   text-align:center;
 }
-.reel__eyebrow{
-  display:flex;align-items:center;justify-content:center;gap:.7em;margin-bottom:1.3rem;
-  font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--on-ink-mut);
-}
-.js .reel__eyebrow{opacity:0;transform:translateY(14px)}
-.reel.is-ready .reel__eyebrow{
-  opacity:calc(1 - var(--out,0));transform:none;
-  transition:opacity .8s var(--ease) .1s, transform .8s var(--ease) .1s;
-}
-
 .reel__title{
   font-family:var(--ff-title);
   /* El tercer término es el presupuesto vertical real: tres renglones más
@@ -451,7 +447,7 @@ ul,ol{list-style:none}
   .reel__frame{transition:none;transform:none}
   /* Especificidad 0,2,0 y más abajo en el archivo: gana sobre `.js .reel__word`
      y compañía, que son el estado inicial de la entrada. */
-  .reel .reel__word,.reel .reel__eyebrow,.reel .reel__foot,.reel .reel__hud,
+  .reel .reel__word,.reel .reel__foot,.reel .reel__hud,
   .reel .reel__reg{
     transform:none;opacity:1;transition:none;
   }
@@ -680,28 +676,11 @@ ul,ol{list-style:none}
    PRESENCIA
    ========================================================= */
 .presencia{position:relative;overflow:hidden}
-.presencia__head{max-width:660px}
+/* El tope de 660px va en los hijos, no aquí: este elemento también es `.wrap`,
+   que lleva `margin-inline:auto`, así que estrecharlo centraba el encabezado en
+   la ventana en vez de dejarlo contra el margen de las demás secciones. */
+.presencia__head > *{max-width:660px}
 .pres-lead{margin-top:1rem;color:var(--on-ink-mut);max-width:54ch;font-size:1.08rem}
-
-/* ---- Lectura del mapa ----
-   Sin JS no hay terminador ni relojes que leer, así que la lectura no se
-   muestra: quedarse en «Calculando…» para siempre sería prometer en falso.
-   Las listas de abajo siguen completas y son la fuente de verdad. */
-.mapcap{display:none}
-.js .mapcap{
-  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  margin-top:clamp(30px,4vw,54px);padding-bottom:.9rem;
-  border-bottom:1px solid var(--line-ink);
-  font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--on-ink-mut);
-}
-.mapcap__l{display:flex;align-items:center;gap:.7em}
-.mapcap__dot{
-  width:7px;height:7px;border-radius:50%;background:var(--gold-lt);
-  box-shadow:0 0 0 4px rgba(216,179,129,.16);
-}
-.mapcap__r{color:var(--gold-lt)}
-.mapcap__ell{opacity:.5}
 
 /* ---- Escenario del mapa ----
    2.39:1, el mismo formato con el que abre el hero. El <img> se recorta por
@@ -709,9 +688,11 @@ ul,ol{list-style:none}
    ventana, así que terminador y geografía comparten coordenadas. */
 /* Va dentro de .wrap: el mapa comparte el eje izquierdo con el resto de la
    página, en vez de salirse 72px como antes. */
+/* La separación con el encabezado la daba la barra de lectura que vivía aquí
+   arriba; al retirarse, el aire lo pone el mapa. */
 .mapstage{
   position:relative;width:100%;
-  margin:0;aspect-ratio:2.39/1;overflow:hidden;
+  margin-top:clamp(34px,4.5vw,60px);aspect-ratio:2.39/1;overflow:hidden;
 }
 .mapstage__layer{position:absolute;inset:0;transform:translateY(var(--py,0px)) scale(1.04);transform-origin:center center;will-change:transform}
 /* Los bordes se desvanecen por los cuatro lados para que el recorte no corte
@@ -800,7 +781,11 @@ ul,ol{list-style:none}
 
 /* ---- Office lists (on ink) ---- */
 .presencia__lists-wrap{margin-top:clamp(40px,6vw,76px)}
-.presencia__cols{display:grid;grid-template-columns:1.2fr 1fr 1.1fr;gap:clamp(28px,4vw,56px);
+/* Dos columnas desde que se retiró el listado de las oficinas de México: las
+   sedes a la izquierda, lo internacional a la derecha. Los pines del mapa las
+   siguen marcando y la entrada dice «oficinas en las principales ciudades». */
+.presencia__cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,56px);
   border-top:1px solid var(--line-ink);padding-top:clamp(28px,4vw,44px)}
 .hq__tag{display:inline-block;font-family:var(--ff-mono);font-size:.66rem;letter-spacing:.2em;
   text-transform:uppercase;color:var(--gold-lt);margin-bottom:.5rem}
@@ -845,8 +830,6 @@ ul,ol{list-style:none}
 .offices--intl ul li:hover{color:var(--gold-lt)}
 .offices--intl ul li span{font-family:var(--ff-display);font-size:1.06rem;font-weight:600;letter-spacing:-.01em}
 .offices--intl ul li small{color:var(--on-ink-mut);font-size:.8rem}
-.offices--mx ul{columns:2;column-gap:28px}
-.offices--mx ul li{color:var(--on-ink-mut);break-inside:avoid}
 
 /* =========================================================
    MEDIOS
@@ -854,14 +837,43 @@ ul,ol{list-style:none}
 .medios__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:clamp(32px,4vw,52px);flex-wrap:wrap}
 .link-arrow{font-weight:600;font-size:.95rem;border-bottom:1.5px solid var(--gold);padding-bottom:3px}
 .link-arrow:hover{color:var(--gold-dk)}
+/* ---- Los dos bloques: Publicaciones y Boletín ----
+   La regla con el rótulo a un lado y la nota al otro es la misma pieza
+   editorial que separa el resto de las secciones. */
+.mblock + .mblock{margin-top:clamp(52px,6.5vw,96px)}
+.mblock__head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  padding-bottom:.85rem;border-bottom:1px solid var(--line-paper);
+  margin-bottom:clamp(22px,2.8vw,34px);
+}
+.mblock__title{
+  font-family:var(--ff-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(1.3rem,2.1vw,1.75rem);
+}
+.mblock__note{
+  font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--on-paper-mut);
+}
+
+/* ---- Publicaciones ---- */
 .medios__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .post{
   background:var(--paper);border:1px solid var(--line-paper);border-radius:3px;
-  padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;min-height:270px;
+  padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:270px;
   transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease);
   cursor:pointer;
 }
 .post:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(16,15,13,.4);border-color:var(--gold)}
+/* La portada es opcional: sin ella la tarjeta es la de siempre. El relleno
+   vive en __body justamente para que la imagen llegue a sangre. */
+.post__cover{aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line-paper)}
+.post__cover img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.06);
+  transition:filter .45s var(--ease),transform .6s var(--ease);
+}
+.post:hover .post__cover img{filter:grayscale(.3) contrast(1.02);transform:scale(1.035)}
+.post__body{padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;flex:1}
 .post__meta{
   display:flex;justify-content:space-between;font-family:var(--ff-mono);
   font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--on-paper-mut);
@@ -872,6 +884,65 @@ ul,ol{list-style:none}
 .post__excerpt{margin-top:.8rem;color:var(--on-paper-mut);font-size:.94rem;flex:1}
 .post__cta{margin-top:1.4rem;font-weight:600;font-size:.9rem;color:var(--gold-dk)}
 .post:hover .post__cta{color:var(--ink)}
+
+/* ---- Boletín ----
+   1:1.414 es A4, el formato del PDF: la portada cabe entera, sin recorte, que
+   es la única manera de que una portada se lea como portada. */
+.bolgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,2.8vw,40px)}
+.bol{display:block;transition:transform .35s var(--ease)}
+a.bol:hover{transform:translateY(-4px)}
+.bol__cover{
+  position:relative;aspect-ratio:1/1.414;overflow:hidden;background:var(--ink);
+  border:1px solid var(--line-paper);border-radius:2px;
+  box-shadow:0 16px 38px -26px rgba(16,15,13,.6);
+  transition:box-shadow .35s var(--ease),border-color .35s var(--ease);
+}
+a.bol:hover .bol__cover{box-shadow:0 26px 54px -26px rgba(16,15,13,.72);border-color:var(--gold)}
+.bol__cover img{width:100%;height:100%;object-fit:cover;object-position:center top}
+
+/* Portada de reemplazo, mientras no se suba el archivo real. No es un hueco:
+   es la misma portada dicha en tipografía, con la paleta de la casa. En cuanto
+   el panel tenga la imagen, el <img> la sustituye y esto no se dibuja. */
+.bol__ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:clamp(16px,1.7vw,24px);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(185,151,79,.16), transparent 62%),
+    var(--ink);
+  color:var(--on-ink);text-align:center;
+}
+.bol__ph-top,.bol__ph-foot{
+  font-family:var(--ff-mono);font-size:.56rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--on-ink-mut);
+}
+.bol__ph-num{
+  margin-top:auto;font-family:var(--ff-display);font-weight:700;
+  font-size:clamp(1.2rem,2.4vw,1.7rem);letter-spacing:-.02em;
+}
+.bol__ph-num em{font-style:italic;font-weight:500;color:var(--gold-lt)}
+.bol__ph-quote{
+  margin:.9rem auto 0;max-width:26ch;
+  font-family:var(--ff-display);font-weight:500;font-style:italic;
+  font-size:clamp(.82rem,1.15vw,.98rem);line-height:1.35;color:var(--proyeccion);
+}
+.bol__ph-foot{margin-top:auto;padding-top:1.2rem}
+/* La regla dorada bajo el número: el mismo hilo que separa todo lo demás. */
+.bol__ph-num::after{
+  content:"";display:block;width:34px;height:1px;background:var(--gold);
+  margin:.75rem auto 0;
+}
+
+.bol__meta{
+  margin-top:1.1rem;font-family:var(--ff-mono);font-size:.66rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--on-paper-mut);
+}
+.bol__num{color:var(--gold-dk);margin-right:.5em}
+.bol__title{
+  margin-top:.5rem;font-family:var(--ff-display);font-weight:700;
+  font-size:1.06rem;line-height:1.2;letter-spacing:-.02em;
+}
+.bol__cta{display:inline-block;margin-top:.7rem;font-weight:600;font-size:.88rem;color:var(--gold-dk)}
+a.bol:hover .bol__cta{color:var(--ink)}
 
 /* =========================================================
    CTA
@@ -1175,7 +1246,6 @@ ul,ol{list-style:none}
      debajo de aquí manda la miniatura de cada fila. */
   .js .divs{display:block}
   .js .visor{display:none}
-  .presencia__cols{grid-template-columns:1fr 1fr}
   .stats__grid{grid-template-columns:repeat(2,1fr);gap:24px 0}
   .stat{padding-block:16px}
   .stat:nth-child(3){border-left:0;padding-left:0}
@@ -1189,16 +1259,15 @@ ul,ol{list-style:none}
   /* Sin recorte: en móvil se muestra el mapa completo, que es su proporción
      nativa. calcVB() en main.js ajusta el viewBox solo. */
   .mapstage{aspect-ratio:2.103/1}
-  .mapcap{font-size:.62rem;letter-spacing:.14em}
 }
 @media (max-width: 760px){
   .presencia__cols{grid-template-columns:1fr;gap:32px}
-  .offices--mx ul{columns:2}
 }
 @media (max-width: 860px){
   .nav__links,.btn--nav,.nav__cert{display:none}
   .nav__toggle{display:flex}
   .medios__grid{grid-template-columns:1fr;}
+  .bolgrid{grid-template-columns:repeat(2,1fr)}
   /* Menos recorrido pegajoso en móvil: el gesto completo cabe en tres
      deslizamientos en vez de seis. */
   .reel__track{height:190vh}
@@ -1218,10 +1287,15 @@ ul,ol{list-style:none}
   .index__thumb{grid-column:1;grid-row:1 / -1;margin-top:3px}
   .index__num{grid-column:2;font-size:.78rem;line-height:1.55}
   .index__body{grid-column:3}
-  .presencia__lists{grid-template-columns:1fr}
   .footer__grid{grid-template-columns:1fr 1fr}
   .stats__grid{grid-template-columns:1fr 1fr}
   .reel__foot{flex-direction:column;align-items:flex-start}
+}
+@media (max-width: 560px){
+  /* Una portada por renglón, pero con tope de ancho: a pantalla completa el
+     A4 se vuelve una torre de 700 px y se come la sección entera. Queda
+     alineada a la izquierda, sobre el mismo eje que todo lo demás. */
+  .bolgrid{grid-template-columns:1fr;gap:32px;max-width:330px}
 }
 @media (max-width: 400px){
   .footer__grid{grid-template-columns:1fr}
