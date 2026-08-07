@@ -195,6 +195,9 @@
       // El reloj de arena no está al principio: entra más tarde, con fade, y se
       // acomoda mientras se scrollea; termina de armarse junto con GROUP.
       reel.style.setProperty("--asm", seg(0.30, 0.82, p).toFixed(4));
+      // Salida: una vez formado el logo, al seguir bajando las letras se apagan
+      // y sólo queda el reloj de arena brillando, antes de dar paso a la sección.
+      reel.style.setProperty("--out", seg(0.80, 0.98, p).toFixed(4));
 
       // Los cortes de toma caen sobre los mismos puntos que los del obturador.
       const next = p < 0.35 ? 0 : p < 0.61 ? 1 : 2;
