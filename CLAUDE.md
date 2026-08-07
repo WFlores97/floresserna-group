@@ -67,6 +67,7 @@ oscuro ni toggle de tema).
   **Archivo** se carga sólo para el wordmark del hero, y se eligió por tener eje
   `wdth` variable: el titular ensancha con el scroll.
 - **Pieza central:** el índice numerado 01–08 de divisiones en la portada.
+  Ver «El índice de Divisiones» más abajo.
 
 ### El hero — «el encuadre»
 
@@ -101,6 +102,43 @@ scroll y rompe el `position:sticky` del hero.
   `.dhero` de las divisiones pero **sin `.reveal`**: un texto legal se consulta, y a
   veces se llega a media página desde otro enlace, así que no debe aparecer con el
   scroll.
+
+### El índice de Divisiones — «el visor»
+
+Ocho filas a ancho completo con su descripción medían casi dos pantallas. El índice
+se parte ahora en dos: a la derecha las ocho filas reducidas a un renglón (sólo
+número y nombre) y a la izquierda un **visor** pegajoso, una sola placa 4:5 que
+cambia de toma con la fila activa. La sección bajó de ~1 840 px a ~1 305 px en
+escritorio, y el índice solo, de 1 118 px a 584 px.
+
+Las filas quedaron **parejas a propósito**: se les quitaron las siglas (FS&A, RIFS,
+CIFS, CDI-FS) y la etiqueta de disciplina, y la 02 se acortó a «Consultoría
+Financiera» — el nombre completo se iba a dos renglones. Con la columna libre el
+nombre volvió a crecer a 1.75rem y los ocho miden exactamente un renglón. Las siglas
+siguen en el titular de cada página de división, y el nombre largo, en el pie.
+
+El visor **no tiene texto propio**: `main.js` le copia el número y la descripción de
+la fila activa, y por eso va `aria-hidden` — un lector de pantalla ya las leyó al
+pasar por la fila. La descripción sigue viviendo en su `<p>` del índice,
+que arriba de 1025 px se vuelve invisible pero legible (`clip-path`), nunca
+`display:none`. El corte entre placas es el del hero — opacidad lineal y corta, no
+disolvencia — con un acercamiento largo detrás; el pie de texto sí se funde, porque
+un corte seco de texto al lado de una placa fundida se lee como error de sincronía.
+`--crop` (una variable en línea por imagen, como `--i`) fija el encuadre de cada
+placa. `plate-magis.jpg` es la única que retrata a su división — el original en
+`Fotos/` trae el logotipo de Magis Fidem impreso abajo y se le recortó esa franja
+porque caía justo sobre el HUD del visor. Las demás son tomas genéricas, y como no
+alcanzan para ocho, la del archivo se repite en la 08 con el encuadre contrario.
+
+`.visor__desc` lleva `min-height` de 3.25em, que son los dos renglones de la
+descripción más larga a ese ancho: sin ese piso el pie brinca al cambiar de fila.
+Es un número medido, así que si se alargan las descripciones hay que rehacerlo.
+
+Debajo de 1025 px no cabe el visor al lado, así que desaparece y manda la
+**miniatura** de cada fila — el mismo archivo y el mismo `--crop`, así que no cuesta
+una descarga extra. Ahí las descripciones vuelven a ser visibles. Sin JS pasa lo
+mismo a cualquier ancho: `.divs` sigue siendo un bloque, salen las miniaturas y las
+descripciones, y el visor nunca aparece.
 
 ### El mapa de Presencia — «la línea del día»
 

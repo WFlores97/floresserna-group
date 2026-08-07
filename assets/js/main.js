@@ -100,6 +100,55 @@
     counters.forEach((c) => cio.observe(c));
   }
 
+  /* ---------- Divisiones: el visor ----------
+     El índice se redujo a un renglón por división y la descripción se mudó
+     aquí. El visor no tiene texto propio: lo copia de la fila activa, que
+     sigue siendo la única fuente. Por eso va aria-hidden — un lector de
+     pantalla ya leyó eso al pasar por la fila. */
+  const visor = document.getElementById("visor");
+  if (visor) {
+    const plates = Array.prototype.slice.call(visor.querySelectorAll(".visor__plate"));
+    const ticks = Array.prototype.slice.call(visor.querySelectorAll(".visor__ticks span"));
+    const rows = Array.prototype.slice.call(document.querySelectorAll(".index__row"));
+    const meta = document.getElementById("visorMeta");
+    const vNum = document.getElementById("visorNum");
+    const vDesc = document.getElementById("visorDesc");
+    const texto = (row, sel) => {
+      const el = row.querySelector(sel);
+      return el ? el.textContent.trim() : "";
+    };
+
+    let activa = 0;
+    let relevo = 0;
+
+    function activar(i) {
+      const row = rows[i];
+      if (i === activa || !row) return;
+      activa = i;
+      plates.forEach((p, j) => p.classList.toggle("is-on", j === i));
+      ticks.forEach((t, j) => t.classList.toggle("is-on", j === i));
+      rows.forEach((r, j) => r.classList.toggle("is-active", j === i));
+
+      // El pie se apaga, cambia y vuelve: un corte seco de texto al lado de
+      // una placa que se funde se leería como error de sincronía.
+      clearTimeout(relevo);
+      const escribir = () => {
+        vNum.textContent = texto(row, ".index__num");
+        vDesc.textContent = texto(row, ".index__desc");
+        meta.classList.remove("is-swap");
+      };
+      if (prefersReduced) { escribir(); return; }
+      meta.classList.add("is-swap");
+      relevo = setTimeout(escribir, 160);
+    }
+
+    rows.forEach((row, i) => {
+      row.addEventListener("mouseenter", () => activar(i));
+      row.addEventListener("focusin", () => activar(i));
+    });
+    rows[0] && rows[0].classList.add("is-active");
+  }
+
   /* ---------- Medios (data-driven from data/medios.json) ---------- */
   const mediosGrid = document.getElementById("mediosGrid");
   if (mediosGrid) {
