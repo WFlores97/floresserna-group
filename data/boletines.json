@@ -1,0 +1,28 @@
+{
+  "boletines": [
+    {
+      "numero": "3",
+      "fecha": "2024-10-01",
+      "edicion": "Edición 2024",
+      "titulo": "Nearshoring: la oportunidad de un país primer mundista",
+      "portada": "",
+      "pdf": ""
+    },
+    {
+      "numero": "2",
+      "fecha": "2024-06-01",
+      "edicion": "Edición Verano 2024",
+      "titulo": "La prisión preventiva para delitos fiscales en el sistema procesal penal acusatorio",
+      "portada": "",
+      "pdf": ""
+    },
+    {
+      "numero": "1",
+      "fecha": "2024-03-20",
+      "edicion": "Edición Primavera 2024",
+      "titulo": "¿Está listo México para incluir la inteligencia artificial en el proceso de recaudación y fiscalización?",
+      "portada": "",
+      "pdf": ""
+    }
+  ]
+}

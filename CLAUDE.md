@@ -158,7 +158,11 @@ solar real, calculado con la fórmula de baja precisión del Astronomical Almana
 por debajo de 0.2°). El hemisferio a oscuras se apaga y el terminador se traza en oro.
 Se redibuja cada minuto. Los relojes de cada plaza usan zonas IANA reales y el punto se
 llena cuando ahí el sol está sobre el horizonte — el mismo cálculo, así que el mapa y
-las listas nunca se contradicen. La lectura «N de 5 plazas con luz» es ese dato.
+las listas nunca se contradicen.
+
+La barra que iba encima del mapa («Luz solar en tiempo real» / «N de 5 plazas con luz»)
+se retiró; el terminador y los relojes siguen vivos, sólo que ya no se anuncian. El aire
+que daba esa barra lo pone ahora el `margin-top` de `.mapstage`.
 
 **Los pines se colocan desde latitud/longitud reales** (`PLAZAS` y `OFICINAS_MX` en
 `main.js`), no desde porcentajes escritos a mano como antes.
@@ -169,9 +173,43 @@ la sección puede ser 2.39:1 en escritorio y 2.103:1 en móvil sin que los pines
 despeguen de la geografía. **La proporción del contenedor nunca debe bajar de 2.103**
 (la nativa de la imagen): por debajo, `cover` recortaría a lo ancho y el modelo se rompe.
 
-Sin JS no hay terminador ni relojes, así que la lectura y los relojes se ocultan (viven
-detrás de `.js`) en vez de quedarse en «Calculando…». La lista de oficinas debajo del
-mapa sigue siendo la fuente de verdad accesible; el mapa es `aria-hidden`.
+Sin JS no hay terminador ni relojes, así que los relojes se ocultan (viven detrás de
+`.js`) en vez de quedarse en un guion.
+
+Debajo del mapa quedan dos columnas: las sedes (CDMX y San Pedro) y las plazas
+internacionales. **El listado de las oficinas de México se retiró**, así que los doce
+pines chicos (`OFICINAS_MX` en `main.js`) ya no tienen contraparte en texto y el mapa es
+`aria-hidden`: la afirmación accesible que las cubre es la entrada de la sección
+(«oficinas en las principales ciudades de la República Mexicana») y el titular «Más de
+quince oficinas». Si alguna vez hay que nombrarlas, ese listado es lo que hay que
+reponer.
+
+### Medios & Boletín — dos bloques, dos archivos
+
+La sección 04 se parte en dos bloques con la misma pieza editorial que separa todo lo
+demás (rótulo a la izquierda, nota en versalitas a la derecha, hilo debajo):
+
+- **Publicaciones** — `#mediosGrid`, alimentado por `data/medios.json`. Cada tarjeta
+  admite una `imagen` de portada **opcional**, recortada a 16:10; sin ella la tarjeta
+  queda de puro texto, que es como se veía antes. Por eso el relleno vive en
+  `.post__body` y no en `.post`: la imagen tiene que llegar a sangre.
+- **Boletín** — `#boletinesGrid`, alimentado por `data/boletines.json`. Las portadas van
+  en **1:1.414, o sea A4**, que es el formato del PDF: así la portada cabe entera y no
+  se recorta, que es la única manera de que una portada se lea como portada.
+
+Los dos traen su respaldo estático escrito en el HTML, así que un `fetch` que no llega
+deja la sección como está en vez de vaciarla. Lo que `main.js` inserta **no lleva
+`.reveal`**: el IntersectionObserver ya corrió cuando el fetch resuelve, así que una
+tarjeta con esa clase se quedaría invisible para siempre.
+
+**Mientras un boletín no tenga `portada` subida, se dibuja una portada tipográfica**
+(`.bol__ph`) con la paleta de la casa — número, hilo dorado, el tema entre comillas y la
+edición al pie. No es un hueco de relleno: es la misma portada dicha en tipografía, para
+que la sección no enseñe un agujero. En cuanto se sube la imagen desde el panel, el
+`<img>` la sustituye y `.bol__ph` deja de dibujarse.
+
+`admin/config.yml` tiene una colección **Boletín** aparte de la de publicaciones, y las
+dos guardan sus archivos en `assets/boletines/`.
 
 ## Datos de contacto reales
 
@@ -179,8 +217,13 @@ mapa sigue siendo la fuente de verdad accesible; el mapa es `aria-hidden`.
 
 ## Pendientes
 
-- Enlaces reales de los artículos de la sección Medios (`pdf` y `url` vacíos en
-  `data/medios.json`; ya se pueden llenar desde el panel)
+- Enlaces reales de los artículos de la sección Medios (`pdf`, `url` e `imagen` vacíos
+  en `data/medios.json`; ya se pueden llenar desde el panel)
+- **Portadas y PDFs del boletín.** `data/boletines.json` tiene las tres ediciones de
+  2024 con su número, fecha y tema, pero `portada` y `pdf` están vacíos: las portadas
+  reales viven todavía en el WordPress de floresserna.com. Mientras tanto se dibuja la
+  portada tipográfica. Al subirlas desde el panel (van a `assets/boletines/`), la
+  imagen entra sola y la tarjeta se vuelve un enlace al PDF.
 - **Validar los documentos legales.** `legal/aviso-de-privacidad.html` y
   `legal/terminos.html` existen y están enlazados desde el pie de las nueve páginas,
   pero son **borradores**: llevan `noindex` y marcadores `.legal__pend` en oro sobre

@@ -47,5 +47,28 @@ collections:
               - { name: "fecha", label: "Fecha", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
               - { name: "titulo", label: "Título", widget: "string" }
               - { name: "resumen", label: "Resumen", widget: "text" }
+              - { name: "imagen", label: "Portada (opcional)", widget: "image", required: false, hint: "Se recorta a 16:10 en la tarjeta. Sin imagen, la tarjeta queda sólo de texto." }
               - { name: "pdf", label: "PDF del boletín (opcional)", widget: "file", required: false, hint: "Sube el archivo PDF; se abrirá al hacer clic en 'Leer'." }
               - { name: "url", label: "Enlace externo (opcional)", widget: "string", required: false, hint: "Úsalo si el análisis vive en otra página en vez de un PDF." }
+
+  - name: "boletines"
+    label: "Boletín"
+    description: "Las ediciones del boletín que aparecen en la página principal."
+    files:
+      - name: "lista"
+        label: "Ediciones"
+        file: "data/boletines.json"
+        format: "json"
+        fields:
+          - name: "boletines"
+            label: "Ediciones"
+            label_singular: "Edición"
+            widget: "list"
+            summary: "N.º {{fields.numero}} — {{fields.titulo}}"
+            fields:
+              - { name: "numero", label: "Número", widget: "string", hint: "Sólo el número: 1, 2, 3…" }
+              - { name: "fecha", label: "Fecha", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+              - { name: "edicion", label: "Edición", widget: "string", required: false, hint: "Como aparece en la portada: «Edición Primavera 2024»." }
+              - { name: "titulo", label: "Tema de la edición", widget: "text" }
+              - { name: "portada", label: "Portada", widget: "image", required: false, hint: "La portada del PDF en vertical (A4). Mientras no la subas, se dibuja una portada de texto en su lugar." }
+              - { name: "pdf", label: "PDF de la edición", widget: "file", required: false, hint: "Sube el PDF; se abrirá al hacer clic en la portada." }
