@@ -1,0 +1,19 @@
+# Originales de imágenes (duplicados sin optimizar de assets/img/)
+Fotos/
+
+# Configuración local de Claude Code (permisos de esta máquina)
+.claude/settings.local.json
+
+# Basura del SO
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Dependencias / builds (por si algún día se agregan)
+node_modules/
