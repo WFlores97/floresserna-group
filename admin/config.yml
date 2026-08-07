@@ -1,0 +1,51 @@
+# =========================================================
+#  Flores Serna Group — configuración del panel (Decap CMS)
+# =========================================================
+#
+#  Host recomendado: NETLIFY  (login sin servidor extra)
+#  -> Netlify: Identity = ON, Git Gateway = ON  (ver DEPLOY.md)
+#
+#  Si en el futuro se hostea en un sitio SIN Netlify Identity
+#  (GitHub Pages, Cloudflare Pages, Vercel), cambia el backend por
+#  "github" + un relay OAuth. Bloque alternativo comentado abajo.
+# =========================================================
+
+backend:
+  name: git-gateway
+  branch: main
+
+# --- Alternativa para hosts estáticos sin Netlify Identity ---
+# backend:
+#   name: github
+#   repo: WFlores97/floresserna-group
+#   branch: main
+#   base_url: https://TU-RELAY-OAUTH   # p. ej. un Cloudflare Worker
+
+# Carpeta donde se guardan los PDFs de los boletines (ruta relativa = portable)
+media_folder: "assets/boletines"
+public_folder: "assets/boletines"
+
+locale: "es"
+
+collections:
+  - name: "medios"
+    label: "Análisis y publicaciones"
+    description: "Boletines y análisis que aparecen en la página principal."
+    files:
+      - name: "lista"
+        label: "Publicaciones"
+        file: "data/medios.json"
+        format: "json"
+        fields:
+          - name: "publicaciones"
+            label: "Publicaciones"
+            label_singular: "Publicación"
+            widget: "list"
+            summary: "{{fields.fecha}} — {{fields.titulo}}"
+            fields:
+              - { name: "fuente", label: "Fuente / categoría", widget: "string", default: "Aranceles Globales" }
+              - { name: "fecha", label: "Fecha", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+              - { name: "titulo", label: "Título", widget: "string" }
+              - { name: "resumen", label: "Resumen", widget: "text" }
+              - { name: "pdf", label: "PDF del boletín (opcional)", widget: "file", required: false, hint: "Sube el archivo PDF; se abrirá al hacer clic en 'Leer'." }
+              - { name: "url", label: "Enlace externo (opcional)", widget: "string", required: false, hint: "Úsalo si el análisis vive en otra página en vez de un PDF." }

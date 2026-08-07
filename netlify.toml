@@ -1,0 +1,27 @@
+# Configuración de despliegue para Netlify (host recomendado).
+# El sitio es estático: se publica la carpeta tal cual, sin build.
+
+[build]
+  publish = "."
+  command = ""
+
+# Cabeceras de seguridad y de caché
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
+
+# Cachear assets estáticos con hash largo (imágenes, mapa, fuentes locales)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+# Que los datos del boletín no se queden cacheados de más
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=60"
