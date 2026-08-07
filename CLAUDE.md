@@ -61,18 +61,76 @@ oscuro ni toggle de tema).
 
 - **Paleta:** tinta `#100f0d`, papel crema `#f4efe3`, oro `#b9974f` / `#d8b381`.
   Son los hexes reales de marca, tomados de los SVG del logo.
-- **Tipografía:** Fraunces (display), Inter (cuerpo), Space Mono (etiquetas y numerales).
+  El hero suma dos valores propios: `--sala #06060a` (más negro que la tinta, para
+  que las barras del obturador se lean como ausencia) y `--proyeccion #ece6d9`.
+- **Tipografía:** Manrope (display y cuerpo), Space Mono (etiquetas y numerales).
+  **Archivo** se carga sólo para el wordmark del hero, y se eligió por tener eje
+  `wdth` variable: el titular ensancha con el scroll.
 - **Pieza central:** el índice numerado 01–08 de divisiones en la portada.
+
+### El hero — «el encuadre»
+
+Escenario pegajoso (`.reel`) de 240vh. Un solo valor de progreso 0→1 mueve tres cosas:
+el obturador, el eje `wdth` del titular y el acercamiento de la toma. El obturador
+**no** abre de forma continua: abre en dos cortes (2.39:1 → 1.90:1 → 1.43:1), como un
+cambio de formato en proyección, y por eso la lectura de encuadre de la esquina dice
+la verdad. Los cortes de toma caen en los mismos puntos.
+
+El titular no sólo ensancha: **se acopla en registro**. Cada renglón tiene su propio
+tramo (`LOCK` en `main.js`), encabalgado sobre los cortes del obturador — FLORES con
+el primero, SERNA con el segundo, GROUP con el tercero. Acoplarse es ensanchar el eje
+`wdth`, volver al margen izquierdo desde una escalera, subir de intensidad y dejar que
+el fantasma dorado (un contorno, `-webkit-text-stroke` en `.reel__reg::before`)
+converja sobre la letra. El desplazamiento del fantasma es **sólo lateral**: en
+diagonal leería como sombra en relieve y chocaría con el renglón de abajo.
+
+La entrada de carga vive en `.reel__word` y el registro en `.reel__reg`, un nivel más
+adentro, porque las dos son la misma propiedad `transform` y se pisarían.
+
+`main.js` escribe `--k`, `--push`, `--tk` y `--foot` sobre `.reel`, y `--l` y `--wdth`
+por renglón, en cada cuadro. **Los valores por omisión en CSS son el estado abierto**, así que sin JS la
+portada se ve terminada. El estado inicial de la entrada vive detrás de `.js`, clase
+que agrega un `<script>` en línea del `<head>`; sin esa guarda el titular quedaría
+invisible cuando no hay JavaScript. Con `prefers-reduced-motion` el recorrido pegajoso
+desaparece (`height:auto`) para no dejar scroll muerto.
+
+`body` usa `overflow-x:clip` (no `hidden`): `hidden` convierte a body en contenedor de
+scroll y rompe el `position:sticky` del hero.
 - El CSS específico de las subpáginas vive en el bloque `PÁGINAS DE DIVISIÓN` de
   `styles.css`.
 
-### El mapa de Presencia
+### El mapa de Presencia — «la línea del día»
 
-`assets/img/world.svg` se generó desde el GeoJSON de Natural Earth (110m countries) con una
-proyección equirectangular y la costura en lon −20°, para que quede centrado en el Pacífico
-(Asia a la izquierda, América a la derecha). Los pines son elementos HTML posicionados por
-porcentaje calculado con esa misma proyección. La lista de oficinas debajo del mapa es la
-fuente de verdad accesible.
+`assets/img/world.svg` se generó desde el GeoJSON de Natural Earth (110m countries). La
+proyección quedó verificada y es exacta: **lienzo equirectangular de 2000×1000 con la
+costura en lon −20°**, de modo que
+
+```
+X = mod(lon + 20, 360) / 360 * 2000        Y = (90 - lat) / 180 * 1000
+```
+
+El `viewBox` del archivo (`416.7 122.2 1472.2 700`) es una ventana sobre ese lienzo.
+
+Encima va un `<svg>` que **comparte ese sistema de coordenadas** y dibuja el terminador
+solar real, calculado con la fórmula de baja precisión del Astronomical Almanac
+(`solar()` en `main.js`, contrastada contra los cuatro solsticios y equinoccios: error
+por debajo de 0.2°). El hemisferio a oscuras se apaga y el terminador se traza en oro.
+Se redibuja cada minuto. Los relojes de cada plaza usan zonas IANA reales y el punto se
+llena cuando ahí el sol está sobre el horizonte — el mismo cálculo, así que el mapa y
+las listas nunca se contradicen. La lectura «N de 5 plazas con luz» es ese dato.
+
+**Los pines se colocan desde latitud/longitud reales** (`PLAZAS` y `OFICINAS_MX` en
+`main.js`), no desde porcentajes escritos a mano como antes.
+
+`calcVB()` deriva el alto de la ventana visible de la proporción real del contenedor
+(`VB.h = VB.w / proporción`), porque el `<img>` se recorta por abajo con `cover`. Por eso
+la sección puede ser 2.39:1 en escritorio y 2.103:1 en móvil sin que los pines se
+despeguen de la geografía. **La proporción del contenedor nunca debe bajar de 2.103**
+(la nativa de la imagen): por debajo, `cover` recortaría a lo ancho y el modelo se rompe.
+
+Sin JS no hay terminador ni relojes, así que la lectura y los relojes se ocultan (viven
+detrás de `.js`) en vez de quedarse en «Calculando…». La lista de oficinas debajo del
+mapa sigue siendo la fuente de verdad accesible; el mapa es `aria-hidden`.
 
 ## Datos de contacto reales
 
