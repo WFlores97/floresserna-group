@@ -1013,6 +1013,62 @@ ul,ol{list-style:none}
 }
 
 /* =========================================================
+   PÁGINAS LEGALES (aviso de privacidad, términos)
+   Documento de lectura larga: una sola columna angosta y la
+   numeración en mono, como el índice de divisiones. Sin
+   `reveal` — un texto legal no se revela al hacer scroll, se
+   consulta, y a veces se llega con Ctrl+F desde otra página.
+   ========================================================= */
+.legal{padding-block:clamp(54px,8vw,104px)}
+.legal__doc{max-width:70ch;margin-inline:auto}
+
+.legal__meta{
+  font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--on-paper-mut);
+  display:flex;flex-wrap:wrap;gap:6px 22px;
+  padding-bottom:18px;border-bottom:1px solid var(--line-paper);
+}
+
+.legal__toc{
+  margin-top:clamp(28px,3.6vw,44px);padding-block:20px;
+  border-top:1px solid var(--line-paper);
+  border-bottom:1px solid var(--line-paper);
+  columns:2;column-gap:44px;
+}
+.legal__toc a{display:block;padding:4px 0;font-size:.93rem;transition:color .2s var(--ease)}
+.legal__toc a:hover{color:var(--gold-dk)}
+
+.legal__sec{margin-top:clamp(36px,5vw,60px);scroll-margin-top:96px}
+.legal__sec > h2{
+  font-family:var(--ff-display);font-weight:700;letter-spacing:-.01em;
+  font-size:clamp(1.12rem,1.8vw,1.44rem);line-height:1.28;
+  display:flex;gap:.7em;align-items:baseline;
+}
+.legal__n{font-family:var(--ff-mono);font-size:.62em;color:var(--gold-dk);flex-shrink:0}
+.legal h3{font-size:1rem;font-weight:700;margin-top:1.7em}
+.legal p{margin-top:1em}
+.legal ul{margin-top:.5em}
+.legal li{margin-top:.5em;padding-left:1.15em;position:relative}
+.legal li::before{content:"—";position:absolute;left:0;color:var(--gold-dk)}
+.legal a{color:var(--gold-dk);text-decoration:underline;text-underline-offset:3px}
+.legal a:hover{color:var(--ink)}
+
+/* Marcadores de lo que falta confirmar. Se ven a propósito y en oro fuerte:
+   ninguno de estos debe seguir en pie cuando el documento llegue al dominio
+   real. El banner de «borrador» que los explicaba se retiró para la
+   presentación interna; está en el historial si hace falta reponerlo. */
+.legal__pend{
+  background:var(--gold-lt);color:var(--ink);
+  padding:.05em .4em;border-radius:2px;
+  font-family:var(--ff-mono);font-size:.85em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+
+@media (max-width: 640px){
+  .legal__toc{columns:1}
+}
+
+/* =========================================================
    REVEAL ANIMATION
    ========================================================= */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
