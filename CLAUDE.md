@@ -97,7 +97,10 @@ desaparece (`height:auto`) para no dejar scroll muerto.
 `body` usa `overflow-x:clip` (no `hidden`): `hidden` convierte a body en contenedor de
 scroll y rompe el `position:sticky` del hero.
 - El CSS específico de las subpáginas vive en el bloque `PÁGINAS DE DIVISIÓN` de
-  `styles.css`.
+  `styles.css`; el de los documentos legales, en `PÁGINAS LEGALES`. Éstos reusan el
+  `.dhero` de las divisiones pero **sin `.reveal`**: un texto legal se consulta, y a
+  veces se llega a media página desde otro enlace, así que no debe aparecer con el
+  scroll.
 
 ### El mapa de Presencia — «la línea del día»
 
@@ -138,6 +141,15 @@ mapa sigue siendo la fuente de verdad accesible; el mapa es `aria-hidden`.
 
 ## Pendientes
 
-- Enlaces reales de los artículos de la sección Medios (hoy están en `#`)
-- **Aviso de privacidad** — requisito de la LFPDPPP, cerrar antes de migrar el dominio
-- Términos y condiciones
+- Enlaces reales de los artículos de la sección Medios (`pdf` y `url` vacíos en
+  `data/medios.json`; ya se pueden llenar desde el panel)
+- **Validar los documentos legales.** `legal/aviso-de-privacidad.html` y
+  `legal/terminos.html` existen y están enlazados desde el pie de las nueve páginas,
+  pero son **borradores**: llevan `noindex` y marcadores `.legal__pend` en oro sobre
+  cada dato que sólo la firma puede confirmar (razón social, RFC, domicilio, correo
+  del área de datos, transferencias internacionales, plazos ARCO, autoridad vigente).
+  Al aprobarlos hay que sustituir los marcadores, borrar el bloque `.legal__draft` y
+  quitar el `noindex`. **El aviso de privacidad es requisito de la LFPDPPP y bloquea
+  la migración del dominio.**
+- Canonical o `noindex` en las copias de Netlify y GitHub Pages cuando floresserna.com
+  entre, para no repartir el posicionamiento entre tres URLs idénticas
