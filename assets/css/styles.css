@@ -1053,19 +1053,10 @@ ul,ol{list-style:none}
 .legal a{color:var(--gold-dk);text-decoration:underline;text-underline-offset:3px}
 .legal a:hover{color:var(--ink)}
 
-/* Aviso de borrador y marcadores de lo que falta confirmar. Se ven a
-   propósito y en oro fuerte: este documento no debe llegar al dominio
-   real con ninguno de los dos en pie. */
-.legal__draft{
-  margin-top:clamp(26px,3.4vw,40px);padding:clamp(16px,2.2vw,24px);
-  border:1px solid var(--gold);border-left-width:4px;
-  background:rgba(185,151,79,.09);
-}
-.legal__draft h2{
-  font-family:var(--ff-mono);font-size:.73rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--gold-dk);
-}
-.legal__draft p{margin-top:.55em;font-size:.95em}
+/* Marcadores de lo que falta confirmar. Se ven a propósito y en oro fuerte:
+   ninguno de estos debe seguir en pie cuando el documento llegue al dominio
+   real. El banner de «borrador» que los explicaba se retiró para la
+   presentación interna; está en el historial si hace falta reponerlo. */
 .legal__pend{
   background:var(--gold-lt);color:var(--ink);
   padding:.05em .4em;border-radius:2px;
