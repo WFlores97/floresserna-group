@@ -262,103 +262,139 @@
           </p>
         </div>
 
-        <ol class="index" role="list">
-          <li class="reveal">
-            <a class="index__row" href="divisiones/flores-serna-asociados.html">
-              <span class="index__num">01</span>
-              <div class="index__body">
-                <h3 class="index__name">Flores Serna &amp; Asociados <span class="index__abbr">FS&amp;A</span></h3>
-                <p class="index__desc">Despacho jurídico, fiscal y contable. El núcleo del consorcio y su origen.</p>
-              </div>
-              <span class="index__tag">Legal · Fiscal</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+        <!-- El índice y su visor. El visor es redundante por definición: no
+             dice nada que la fila no diga ya, por eso va aria-hidden y su
+             texto lo escribe main.js copiándolo de la fila activa. Sin JS
+             desaparece y el índice recupera sus descripciones a ancho completo. -->
+        <div class="divs">
+          <figure class="visor reveal" id="visor" aria-hidden="true">
+            <div class="visor__frame">
+              <img class="visor__plate is-on" style="--crop:center 46%" src="assets/img/plate-justicia.jpg" alt="" loading="lazy" decoding="async" />
+              <img class="visor__plate" style="--crop:center 34%" src="assets/img/plate-escritorio.jpg" alt="" loading="lazy" decoding="async" />
+              <img class="visor__plate" style="--crop:center 38%" src="assets/img/plate-consulta.jpg" alt="" loading="lazy" decoding="async" />
+              <img class="visor__plate" style="--crop:center 46%" src="assets/img/plate-libreta.jpg" alt="" loading="lazy" decoding="async" />
+              <img class="visor__plate" style="--crop:50% 30%" src="assets/img/plate-firma.jpg" alt="" loading="lazy" decoding="async" />
+              <img class="visor__plate" style="--crop:20% 56%" src="assets/img/plate-archivo.jpg" alt="" loading="lazy" decoding="async" />
+              <!-- La única placa que es de la división y no una toma genérica.
+                   El original trae el logotipo de Magis Fidem impreso abajo:
+                   se recortó esa franja porque caía justo sobre el HUD. -->
+              <img class="visor__plate" style="--crop:center" src="assets/img/plate-magis.jpg" alt="" loading="lazy" decoding="async" />
+              <!-- Sólo hay siete placas: la del archivo vuelve aquí con el
+                   encuadre contrario, que es otra toma en la práctica. -->
+              <img class="visor__plate" style="--crop:84% 24%" src="assets/img/plate-archivo.jpg" alt="" loading="lazy" decoding="async" />
+              <span class="visor__veil"></span>
+              <span class="visor__hud"><span id="visorNum">01</span> / 08</span>
+              <span class="visor__ticks">
+                <span class="is-on"></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </span>
+            </div>
+            <figcaption class="visor__meta" id="visorMeta">
+              <p class="visor__desc" id="visorDesc">Despacho jurídico, fiscal y contable. El núcleo del consorcio y su origen.</p>
+            </figcaption>
+          </figure>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/consultoria-financiera.html">
-              <span class="index__num">02</span>
-              <div class="index__body">
-                <h3 class="index__name">Consultoría Financiera &amp; Servicios Integrales</h3>
-                <p class="index__desc">Estrategia financiera y servicios integrales para empresas e instituciones.</p>
-              </div>
-              <span class="index__tag">Finanzas</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+          <ol class="index" role="list">
+            <li class="reveal">
+              <a class="index__row" href="divisiones/flores-serna-asociados.html">
+                <img class="index__thumb" style="--crop:center 46%" src="assets/img/plate-justicia.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">01</span>
+                <div class="index__body">
+                  <h3 class="index__name">Flores Serna &amp; Asociados</h3>
+                  <p class="index__desc">Despacho jurídico, fiscal y contable. El núcleo del consorcio y su origen.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/relaciones-institucionales.html">
-              <span class="index__num">03</span>
-              <div class="index__body">
-                <h3 class="index__name">Relaciones Institucionales <span class="index__abbr">RIFS</span></h3>
-                <p class="index__desc">Vinculación con el sector público, el privado y organismos nacionales e internacionales.</p>
-              </div>
-              <span class="index__tag">Institucional</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/consultoria-financiera.html">
+                <img class="index__thumb" style="--crop:center 34%" src="assets/img/plate-escritorio.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">02</span>
+                <div class="index__body">
+                  <!-- El nombre completo («… & Servicios Integrales») se salía a
+                       dos renglones y rompía el parejo del índice. Sigue entero
+                       en el pie y en el titular de su propia página. -->
+                  <h3 class="index__name">Consultoría Financiera</h3>
+                  <p class="index__desc">Estrategia financiera y servicios integrales para empresas e instituciones.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/comunicacion-institucional.html">
-              <span class="index__num">04</span>
-              <div class="index__body">
-                <h3 class="index__name">Comunicación Institucional <span class="index__abbr">CIFS</span></h3>
-                <p class="index__desc">Estrategia de comunicación, reputación y asuntos públicos.</p>
-              </div>
-              <span class="index__tag">Comunicación</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/relaciones-institucionales.html">
+                <img class="index__thumb" style="--crop:center 38%" src="assets/img/plate-consulta.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">03</span>
+                <div class="index__body">
+                  <h3 class="index__name">Relaciones Institucionales</h3>
+                  <p class="index__desc">Vinculación con el sector público, el privado y organismos nacionales e internacionales.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/financiera-flores-serna.html">
-              <span class="index__num">05</span>
-              <div class="index__body">
-                <h3 class="index__name">Financiera Flores Serna</h3>
-                <p class="index__desc">Soluciones de financiamiento y asesoría bancaria a la medida.</p>
-              </div>
-              <span class="index__tag">Banca</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/comunicacion-institucional.html">
+                <img class="index__thumb" style="--crop:center 46%" src="assets/img/plate-libreta.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">04</span>
+                <div class="index__body">
+                  <h3 class="index__name">Comunicación Institucional</h3>
+                  <p class="index__desc">Estrategia de comunicación, reputación y asuntos públicos.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/centro-de-investigacion.html">
-              <span class="index__num">06</span>
-              <div class="index__body">
-                <h3 class="index__name">Centro de Investigación <span class="index__abbr">CDI-FS</span></h3>
-                <p class="index__desc">Investigación aplicada en política fiscal, económica y derechos.</p>
-              </div>
-              <span class="index__tag">Investigación</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/financiera-flores-serna.html">
+                <img class="index__thumb" style="--crop:50% 30%" src="assets/img/plate-firma.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">05</span>
+                <div class="index__body">
+                  <h3 class="index__name">Financiera Flores Serna</h3>
+                  <p class="index__desc">Soluciones de financiamiento y asesoría bancaria a la medida.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/magis-fidem.html">
-              <span class="index__num">07</span>
-              <div class="index__body">
-                <h3 class="index__name">Magis Fidem A.C.</h3>
-                <p class="index__desc">Asociación civil enfocada en impacto social y responsabilidad.</p>
-              </div>
-              <span class="index__tag">Social</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/centro-de-investigacion.html">
+                <img class="index__thumb" style="--crop:20% 56%" src="assets/img/plate-archivo.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">06</span>
+                <div class="index__body">
+                  <h3 class="index__name">Centro de Investigación</h3>
+                  <p class="index__desc">Investigación aplicada en política fiscal, económica y derechos.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
 
-          <li class="reveal">
-            <a class="index__row" href="divisiones/centro-cultural-floreser.html">
-              <span class="index__num">08</span>
-              <div class="index__body">
-                <h3 class="index__name">Centro Cultural Floreser</h3>
-                <p class="index__desc">Promoción de la cultura y del conocimiento.</p>
-              </div>
-              <span class="index__tag">Cultura</span>
-              <span class="index__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
-        </ol>
+            <li class="reveal">
+              <a class="index__row" href="divisiones/magis-fidem.html">
+                <img class="index__thumb" style="--crop:center" src="assets/img/plate-magis.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">07</span>
+                <div class="index__body">
+                  <h3 class="index__name">Magis Fidem A.C.</h3>
+                  <p class="index__desc">Asociación civil enfocada en impacto social y responsabilidad.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+
+            <li class="reveal">
+              <a class="index__row" href="divisiones/centro-cultural-floreser.html">
+                <img class="index__thumb" style="--crop:84% 24%" src="assets/img/plate-archivo.jpg" alt="" loading="lazy" decoding="async" />
+                <span class="index__num">08</span>
+                <div class="index__body">
+                  <h3 class="index__name">Centro Cultural Floreser</h3>
+                  <p class="index__desc">Promoción de la cultura y del conocimiento.</p>
+                </div>
+                <span class="index__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
 
