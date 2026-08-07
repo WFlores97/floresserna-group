@@ -162,7 +162,6 @@
     };
 
     const reelFoot = document.getElementById("reelFoot");
-    const regs = Array.prototype.slice.call(reel.querySelectorAll(".reel__reg"));
     // Un tramo de acople por renglón, encabalgados sobre los cortes del
     // obturador: el wordmark termina de armarse cuando el encuadre termina de abrir.
     const LOCK = [[0.02, 0.34], [0.26, 0.60], [0.50, 0.86]];
@@ -185,15 +184,17 @@
       reel.style.setProperty("--k", Math.max(0, k).toFixed(4));
       reel.style.setProperty("--push", (1.14 - 0.13 * p).toFixed(4));
 
-      regs.forEach((el, i) => {
-        const w = LOCK[i] || LOCK[LOCK.length - 1];
-        const l = seg(w[0], w[1], p);
-        el.style.setProperty("--l", l.toFixed(4));
-        el.style.setProperty("--wdth", (76 + 40 * l).toFixed(1));
-      });
+      // Las tres palabras del logo se acoplan en su tramo (FLORES, luego SERNA,
+      // luego GROUP), encabalgadas sobre los cortes del obturador.
+      reel.style.setProperty("--l0", seg(LOCK[0][0], LOCK[0][1], p).toFixed(4));
+      reel.style.setProperty("--l1", seg(LOCK[1][0], LOCK[1][1], p).toFixed(4));
+      reel.style.setProperty("--l2", seg(LOCK[2][0], LOCK[2][1], p).toFixed(4));
       // El cartón crece con el encuadre; el pie entra con el primer corte.
       reel.style.setProperty("--tk", (0.68 + 0.32 * seg(0.02, 0.66, p)).toFixed(4));
       reel.style.setProperty("--foot", seg(0.20, 0.42, p).toFixed(4));
+      // El reloj de arena no está al principio: entra más tarde, con fade, y se
+      // acomoda mientras se scrollea; termina de armarse junto con GROUP.
+      reel.style.setProperty("--asm", seg(0.30, 0.82, p).toFixed(4));
 
       // Los cortes de toma caen sobre los mismos puntos que los del obturador.
       const next = p < 0.35 ? 0 : p < 0.61 ? 1 : 2;
